@@ -35,4 +35,9 @@ jobs:
 
       - name: Publish to GitHub Packages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/Divide-By-Zero-Solutions/index.json" --skip-duplicate
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem ./artifacts -Filter *.nupkg
+          foreach ($pkg in $packages) {
+            dotnet nuget push $pkg.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/Divide-By-Zero-Solutions/index.json" --skip-duplicate
+          }

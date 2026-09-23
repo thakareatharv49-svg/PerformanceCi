@@ -12,6 +12,9 @@
     <Authors>Divide-By-Zero-Solutions</Authors>
     <Company>Divide-By-Zero-Solutions</Company>
     <Description>Zero-allocation performance-gate attributes, scoped watchdogs, heavy-event bus, and CI report writers for PerformanceCI.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>performance;benchmark;gates;assertions;profiling;ci</PackageTags>
     <PackageProjectUrl>https://github.com/Divide-By-Zero-Solutions/PerformanceCi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Divide-By-Zero-Solutions/PerformanceCi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -22,6 +25,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="PerformanceCI.Tests" />
+    <None Include="README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
 
 </Project>
