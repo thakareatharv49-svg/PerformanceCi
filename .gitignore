@@ -1,32 +1,22 @@
-# Build output
-[Bb]in/
-[Oo]bj/
-.vs/
-
-# Test and coverage output
-TestResults/
-**/TestResults/
-coverage/
-coverage.*
-
-# BenchmarkDotNet output
-BenchmarkDotNet.Artifacts/
-**/BenchmarkDotNet.Artifacts/
-
-# IDE and local settings
+bin/
+obj/
 *.user
+*.vspscc
+*.vssscc
+*.log
 *.suo
 *.userosscache
 *.sln.docstates
-
-# Local configuration and secrets
-.env
-.env.*
-*.pfx
-*.p12
-*.key
-*.pem
-
-# OS files
-.DS_Store
-Thumbs.db
+[*.mdf]
+[*.ldf]
+[*.dbmdf]
+[*.sysdb]
+[*.tmp]
+__pycache__/
+*.py[c]
+*.pyo
+.Tools/
+*.wrap
+.vscode/
+*.code-workspace
+```
