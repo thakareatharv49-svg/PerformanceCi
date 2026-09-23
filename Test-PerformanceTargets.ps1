@@ -6,10 +6,10 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $targets = @(
-	[pscustomobject]@{ Benchmark = 'PortableBenchmarks'; Method = 'CachePrediction'; MaximumNanoseconds = 1000; MaximumAllocatedBytes = 512; FilePattern = '*PortableBenchmarks*-report.csv'; Job = $null }
-	[pscustomobject]@{ Benchmark = 'PortableBenchmarks'; Method = 'NormalizePhrase'; MaximumNanoseconds = 1000; MaximumAllocatedBytes = 512; FilePattern = '*PortableBenchmarks*-report.csv'; Job = $null }
-	[pscustomobject]@{ Benchmark = 'SqliteVocabularyBenchmarks'; Method = 'ReadVocabularyTiles'; MaximumNanoseconds = 100000; MaximumAllocatedBytes = 4096; FilePattern = '*SqliteVocabularyBenchmarks*-report.csv'; Job = 'InProcess' }
-	[pscustomobject]@{ Benchmark = 'SqliteVocabularyBenchmarks'; Method = 'AddVocabularyTile'; MaximumMilliseconds = 250; MaximumAllocatedBytes = 20MB; FilePattern = '*SqliteVocabularyBenchmarks*-report.csv'; Job = 'InProcess' }
+	[pscustomobject]@{ BenchmarkClass = 'PerformanceCI.Benchmarks.PortableBenchmarks'; Benchmark = 'PortableBenchmarks'; Method = 'CachePrediction'; MaximumNanoseconds = 1000; MaximumAllocatedBytes = 512; FilePattern = '*PortableBenchmarks*-report.csv'; Job = $null }
+	[pscustomobject]@{ BenchmarkClass = 'PerformanceCI.Benchmarks.PortableBenchmarks'; Benchmark = 'PortableBenchmarks'; Method = 'NormalizePhrase'; MaximumNanoseconds = 1000; MaximumAllocatedBytes = 512; FilePattern = '*PortableBenchmarks*-report.csv'; Job = $null }
+	[pscustomobject]@{ BenchmarkClass = 'PerformanceCI.Integration.SqliteVocabularyBenchmarks'; Benchmark = 'SqliteVocabularyBenchmarks'; Method = 'ReadByCategory'; MaximumNanoseconds = 100000; MaximumAllocatedBytes = 4096; FilePattern = '*SqliteVocabularyBenchmarks*-report.csv'; Job = $null }
+	[pscustomobject]@{ BenchmarkClass = 'PerformanceCI.Integration.SqliteVocabularyBenchmarks'; Benchmark = 'SqliteVocabularyBenchmarks'; Method = 'InsertTile'; MaximumMilliseconds = 250; MaximumAllocatedBytes = 20MB; FilePattern = '*SqliteVocabularyBenchmarks*-report.csv'; Job = $null }
 )
 
 function ConvertTo-Nanoseconds([string]$value) {
