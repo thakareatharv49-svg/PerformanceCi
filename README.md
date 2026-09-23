@@ -249,8 +249,11 @@ dotnet run --project PerformanceCI.Integration -c Release
 
 ## Installation
 
-Add the GitHub Packages feed (see [NuGet.Config](NuGet.Config)) then:
+Every push to `main` publishes a `PerformanceCI.Core.nupkg` to the GitHub Packages feed. Add the source and credentials, then reference the package:
 
-```bash
+```powershell
+dotnet nuget add source "https://nuget.pkg.github.com/Divide-By-Zero-Solutions/index.json" -n github --username <your-github-username> --password <PAT-with-read:packages>
 dotnet add package PerformanceCI.Core
 ```
+
+> `GITHUB_TOKEN` works inside Actions only; a PAT is required for local restore. `--skip-duplicate` keeps the publish idempotent — bump `Version` in `PerformanceCI.Core.csproj` to ship a new one.

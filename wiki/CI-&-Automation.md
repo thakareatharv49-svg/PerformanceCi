@@ -14,8 +14,10 @@ The repository ships a complete automation stack: a GitHub Actions pipeline, a h
 | Restore | `dotnet restore` |
 | Build | `dotnet build -c Release --no-restore` |
 | **Test** | `dotnet test -c Release --no-build` (the xUnit suite gates on 98%+ Core coverage targets) |
-| Pack | `dotnet pack PerformanceCI.Core -c Release -o ./artifacts` |
-| Publish | `dotnet nuget push ./artifacts/*.nupkg` → GitHub Packages (`Divide-By-Zero-Solutions` feed) |
+| Pack | `dotnet pack PerformanceCI.Core -c Release -o ./artifacts --no-build` |
+| Publish | `dotnet nuget push ./artifacts/*.nupkg` → GitHub Packages (`Divide-By-Zero-Solutions` feed) — **`main` pushes only** |
+
+> **Deployment guard:** the `Publish to GitHub Packages` step only runs on `push` to `main` (`github.event_name == 'push' && github.ref == 'refs/heads/main'`). Fork PRs never publish — their read-only tokens cannot, and a PR should never ship a package. PRs still build and run the full test suite.
 
 > **Why are the BDN benchmark runners *not* a CI step here?** BenchmarkDotNet results are machine-sensitive; gate-checked on shared runners they produce flaky failures. The portable runners double as smoke tests locally; hard performance gates belong on dedicated hardware (see `Test-PerformanceTargets.ps1` below).
 
@@ -27,7 +29,32 @@ Output identity:
 Divide-By-Zero-Solutions/PerformanceCi → PerformanceCI.Core (GitHub Packages)
 ```
 
-Consumers add the feed via `NuGet.Config` (already checked in, nuget.org + GitHub Packages) and `dotnet add package PerformanceCI.Core`.
+Every **push to `main`** builds, tests, packs `PerformanceCI.Core-<version>.nupkg`, and pushes it to the GitHub Packages NuGet feed:
+
+```
+https://nuget.pkg.github.com/Divide-By-Zero-Solutions/index.json
+```
+
+Consumers reference the package by adding the feed plus credentials:
+
+```xml
+<!-- NuGet.Config -->
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+    <add key="github" value="https://nuget.pkg.github.com/Divide-By-Zero-Solutions/index.json" />
+  </packageSources>
+</configuration>
+```
+
+```bash
+# Restore with a PAT that has read:packages (GITHUB_TOKEN works only in Actions).
+dotnet nuget add source nuget.pkg.github.com/Divide-By-Zero-Solutions/index.json -n github --username YOUR_GITHUB_USERNAME --password YOUR_PAT
+dotnet add package PerformanceCI.Core
+```
+
+`--skip-duplicate` makes the push idempotent — a version already published once is never overwritten. Version bumps come from `Version` in `PerformanceCI.Core.csproj` (currently `2.0.0`).
 
 ---
 
